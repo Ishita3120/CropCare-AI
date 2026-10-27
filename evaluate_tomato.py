@@ -7,8 +7,8 @@ from sklearn.metrics import confusion_matrix, classification_report
 # -----------------------------
 # Paths
 # -----------------------------
-DATA_DIR = "datasets/Tomato/TomatoCNN"
-MODEL_PATH = "models/tomato_mobilenetv2.keras"
+DATA_DIR = "datasets/Tomato/TomatoCNN4000"
+MODEL_PATH = "models/tomato_best.keras"
 
 IMG_SIZE = (224, 224)
 BATCH_SIZE = 16
