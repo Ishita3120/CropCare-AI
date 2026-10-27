@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Treatment Guidance | CropCare AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        :root {
+            --green: #21864b;
+            --dark: #153f2c;
+            --muted: #718477;
+            --border: #dcebe0;
+            --pale: #edf8ef;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            background:
+                linear-gradient(rgba(244, 248, 244, 0.11),
+                    rgba(244, 248, 244, 0.45)),
+                url("/static/images/Golden-Hour Tomato Garden Spraying.png") center / cover fixed;
+        }
+
+
+
+        .app-shell {
+            width: min(1200px, 94%);
+            margin: auto;
+            padding-bottom: 40px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 0 26px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            background: white;
+            font-size: 29px;
+            box-shadow: 0 5px 20px #174b3510;
+        }
+
+        .brand-name {
+            color: var(--dark);
+            font-size: 27px;
+            font-weight: 850;
+        }
+
+        .brand-tagline {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 19px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: white;
+            color: #176b3a;
+            font-size: 14px;
+            font-weight: 750;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s, background .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px #174b3510;
+        }
+
+        .btn-primary {
+            border-color: var(--green);
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #176b3a;
+        }
+
+        /* Hero: heading and subtitle share the same left alignment */
+        .hero {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            overflow: hidden;
+            margin-bottom: 26px;
+            padding: 44px 42px;
+            border: 1px solid #ffffffb5;
+            border-radius: 30px;
+            background:
+                radial-gradient(circle at 85% 20%, #a8e4b866, transparent 30%),
+                linear-gradient(120deg, #d9f2e0, #eff9f0);
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero h1 {
+            margin: 0 0 14px;
+            color: #123f2c;
+            font-size: clamp(32px, 4.5vw, 56px);
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            overflow-wrap: anywhere;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 0;
+            color: #688273;
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .hero-decoration {
+            flex: 0 0 auto;
+            font-size: clamp(65px, 8vw, 100px);
+            opacity: .85;
+            filter: drop-shadow(0 8px 12px #176b3a16);
+            user-select: none;
+        }
+
+        .section-card {
+            margin-bottom: 24px;
+            padding: 30px;
+            border: 1px solid #ffffffd0;
+            border-radius: 26px;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: 0 12px 35px #214c300b;
+        }
+
+        .section-title {
+            margin: 0;
+            color: #183f2d;
+            font-size: 25px;
+            font-weight: 850;
+        }
+
+        .section-description {
+            margin: 9px 0 24px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .disease-heading {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .disease-icon {
+            display: grid;
+            flex: 0 0 52px;
+            place-items: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: var(--pale);
+            font-size: 26px;
+        }
+
+        .disease-heading h2 {
+            margin: 0;
+            color: #176b3a;
+            font-size: clamp(21px, 3vw, 30px);
+            overflow-wrap: anywhere;
+        }
+
+        .treatment-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .info-card {
+            min-width: 0;
+            padding: 23px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: #fbfdfb;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 24px #174b350d;
+        }
+
+        .info-card.wide {
+            grid-column: 1 / -1;
+        }
+
+        .info-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 13px;
+            color: #207644;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .info-icon {
+            font-size: 21px;
+        }
+
+        .info-value {
+            margin: 0;
+            color: #355443;
+            font-size: 15px;
+            line-height: 1.85;
+            overflow-wrap: anywhere;
+        }
+
+        .info-value ul {
+            margin: 0;
+            padding-left: 22px;
+        }
+
+        .info-value li {
+            margin: 7px 0;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .dosage-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .dosage-card {
+            min-width: 0;
+            padding: 19px;
+            border: 1px solid #d8eadc;
+            border-radius: 17px;
+            background: #f0f9f1;
+        }
+
+        .dosage-label {
+            color: #65806e;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+            overflow-wrap: anywhere;
+        }
+
+        .dosage-value {
+            margin-top: 9px;
+            color: #176b3a;
+            font-size: 25px;
+            font-weight: 850;
+            overflow-wrap: anywhere;
+        }
+
+        .notice {
+            margin-top: 22px;
+            padding: 19px 21px;
+            border: 1px solid #f0dfb8;
+            border-radius: 17px;
+            background: #fff9eb;
+            color: #775b26;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .notice p {
+            margin: 8px 0 0;
+        }
+
+        .healthy-message {
+            padding: 23px;
+            border: 1px solid #cfe9d8;
+            border-radius: 18px;
+            background: #eaf8ed;
+        }
+
+        .healthy-message h3 {
+            margin: 0 0 10px;
+            color: #176b3a;
+        }
+
+        .healthy-message p {
+            margin: 0;
+            color: #355443;
+            line-height: 1.8;
+        }
+
+        .error-message {
+            padding: 22px;
+            border: 1px solid #f0d2a7;
+            border-radius: 18px;
+            background: #fff7e9;
+            color: #76541e;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .page-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 13px;
+            margin-top: 22px;
+        }
+
+        .disclaimer {
+            margin: 25px 0 0;
+            color: #7b8b7f;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 650px) {
+            .app-shell {
+                width: 93%;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .brand-icon {
+                width: 47px;
+                height: 47px;
+            }
+
+            .brand-name {
+                font-size: 21px;
+            }
+
+            .brand-tagline {
+                font-size: 12px;
+            }
+
+            .topbar .btn {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .hero {
+                gap: 10px;
+                padding: 32px 23px;
+                border-radius: 23px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .hero-decoration {
+                position: absolute;
+                right: 15px;
+                bottom: 6px;
+                opacity: .16;
+            }
+
+            .section-card {
+                padding: 22px 18px;
+                border-radius: 22px;
+            }
+
+            .section-title {
+                font-size: 22px;
+            }
+
+            .treatment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-card.wide {
+                grid-column: auto;
+            }
+
+            .dosage-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .dosage-card {
+                padding: 14px;
+            }
+
+            .dosage-value {
+                font-size: 21px;
+            }
+
+            .page-actions {
+                flex-direction: column;
+            }
+
+            .page-actions .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .dosage-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app-shell">
+
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-icon">🌿</div>
+                <div>
+                    <div class="brand-name">CropCare AI</div>
+                    <div class="brand-tagline">Treatment Recommendations</div>
+                </div>
+            </div>
+            <a href="/result" class="btn">← Back to Result</a>
+        </header>
+
+        <section class="hero">
+            <div class="hero-copy">
+                <h1>Treatment Guidance 💚</h1>
+                <p>Understand the recommended care for your crop and its predicted condition.</p>
+            </div>
+            <div class="hero-decoration" aria-hidden="true">🌱</div>
+        </section>
+
+        <section class="section-card" id="treatment-content" aria-live="polite">
+            Loading treatment information...
+        </section>
+
+        <section class="section-card">
+            <h2 class="section-title">What's Next?</h2>
+            <p class="section-description">
+                Return to your diagnosis or analyze another crop leaf.
+            </p>
+
+            <div class="page-actions">
+                <a href="/result" class="btn">← Back to Result</a>
+                <a href="/upload" class="btn btn-primary">🌱 Analyze Another Leaf →</a>
+            </div>
+
+            <p class="disclaimer">
+                CropCare AI is an academic prototype. Predictions and recommendations may be
+                inaccurate. Confirm disease identification and follow the registered product
+                label and local agricultural expert's advice before applying any chemical.
+            </p>
+        </section>
+    </main>
+
+    <script>
+        (() => {
+            "use strict";
+
+            const container = document.getElementById("treatment-content");
+            const saved = sessionStorage.getItem("cropcareResult");
+
+            function normalize(value) {
+                return String(value ?? "")
+                    .toLowerCase()
+                    .replace(/[_-]+/g, " ")
+                    .replace(/\s+/g, " ")
+                    .trim();
+            }
+
+            function titleCase(value) {
+                return String(value ?? "")
+                    .replace(/[_-]+/g, " ")
+                    .replace(/\b\w/g, char => char.toUpperCase());
+            }
+
+            function makeElement(tag, className, text) {
+                const element = document.createElement(tag);
+                if (className) element.className = className;
+                if (text !== undefined) element.textContent = String(text);
+                return element;
+            }
+
+            function showError(title, message) {
+                container.replaceChildren();
+
+                const box = makeElement("div", "error-message");
+                box.append(
+                    makeElement("h2", "", title),
+                    makeElement("p", "", message)
+                );
+                container.appendChild(box);
+            }
+
+            function renderValue(parent, value) {
+                if (value === null || value === undefined || value === "") {
+                    parent.textContent = "Not provided";
+                    return;
+                }
+
+                if (Array.isArray(value)) {
+                    const list = document.createElement("ul");
+
+                    value.forEach(item => {
+                        const li = document.createElement("li");
+
+                        if (item && typeof item === "object") {
+                            renderValue(li, item);
+                        } else {
+                            li.textContent = String(item);
+                        }
+
+                        list.appendChild(li);
+                    });
+
+                    parent.appendChild(list);
+                    return;
+                }
+
+                if (typeof value === "object") {
+                    const list = document.createElement("ul");
+
+                    Object.entries(value).forEach(([key, val]) => {
+                        const li = document.createElement("li");
+                        li.appendChild(
+                            makeElement("strong", "", titleCase(key) + ": ")
+                        );
+
+                        if (val && typeof val === "object") {
+                            renderValue(li, val);
+                        } else {
+                            li.appendChild(
+                                document.createTextNode(String(val ?? "Not provided"))
+                            );
+                        }
+
+                        list.appendChild(li);
+                    });
+
+                    parent.appendChild(list);
+                    return;
+                }
+
+                parent.textContent = String(value);
+            }
+
+            function addInfoCard(grid, label, value, icon, wide = false) {
+                if (value === null || value === undefined || value === "") return;
+
+                const card = makeElement(
+                    "article",
+                    "info-card" + (wide ? " wide" : "")
+                );
+
+                const heading = makeElement("h3", "info-heading");
+                heading.append(
+                    makeElement("span", "info-icon", icon),
+                    makeElement("span", "", label)
+                );
+
+                const content = makeElement("div", "info-value");
+                renderValue(content, value);
+
+                card.append(heading, content);
+                grid.appendChild(card);
+            }
+
+            function addDosageCard(grid, label, value) {
+                if (value === null || value === undefined || value === "") return;
+
+                const card = makeElement("div", "dosage-card");
+                card.append(
+                    makeElement("div", "dosage-label", label),
+                    makeElement("div", "dosage-value", value)
+                );
+                grid.appendChild(card);
+            }
+
+            function renderTreatment(data) {
+                const disease = data.disease || {};
+                const treatment = data.treatment || {};
+                const crop = data.crop || "Unknown";
+
+                const diseaseName =
+                    disease.display_name || disease.label || "Unknown condition";
+
+                const diseaseLabel = normalize(disease.label || diseaseName);
+
+                container.replaceChildren();
+
+                const heading = makeElement("div", "disease-heading");
+                heading.append(
+                    makeElement("div", "disease-icon", "🌿"),
+                    makeElement(
+                        "h2",
+                        "",
+                        titleCase(crop) + " — " + titleCase(diseaseName)
+                    )
+                );
+                container.appendChild(heading);
+
+                if (diseaseLabel === "healthy" || /healthy/i.test(diseaseName)) {
+                    const message = makeElement("div", "healthy-message");
+
+                    message.append(
+                        makeElement(
+                            "h3",
+                            "",
+                            "✅ Your leaf was classified as healthy"
+                        ),
+                        makeElement(
+                            "p",
+                            "",
+                            "Continue regular crop monitoring, maintain appropriate watering, " +
+                            "provide suitable sunlight and keep the growing area clean. " +
+                            "No disease-specific treatment is indicated by this prediction."
+                        )
+                    );
+
+                    container.appendChild(message);
+                    return;
+                }
+
+                if (!treatment || typeof treatment !== "object" ||
+                    Object.keys(treatment).length === 0) {
+                    showError(
+                        "Specific treatment information unavailable",
+                        "No treatment details were returned for this prediction. " +
+                        "Consult a local agricultural expert for disease-specific guidance."
+                    );
+                    return;
+                }
+
+                const grid = makeElement("div", "treatment-grid");
+                container.appendChild(grid);
+
+                const fields = [
+                    ["active_ingredient", "Active Ingredient", "🧪", false],
+                    ["name", "Treatment Name", "🌿", false],
+                    ["advice", "Recommended Advice", "💡", true],
+                    ["recommendations", "Recommended Treatment", "🩺", true],
+                    ["treatment", "Treatment Details", "🧴", true],
+                    ["prevention", "Prevention Tips", "🛡️", true],
+                    ["description", "About This Condition", "📋", true],
+                    ["recheck_days", "Recheck After (days)", "📅", false]
+                ];
+
+                const handled = new Set();
+
+                fields.forEach(([key, label, icon, wide]) => {
+                    if (Object.prototype.hasOwnProperty.call(treatment, key)) {
+                        addInfoCard(grid, label, treatment[key], icon, wide);
+                        handled.add(key);
+                    }
+                });
+
+                const minDose = treatment.min_dosage_ml_per_l;
+                const maxDose = treatment.max_dosage_ml_per_l;
+
+                if (minDose !== undefined || maxDose !== undefined) {
+                    const dosageGrid = makeElement("div", "dosage-grid");
+
+                    addDosageCard(
+                        dosageGrid,
+                        "Minimum dosage (ml per litre)",
+                        minDose
+                    );
+
+                    addDosageCard(
+                        dosageGrid,
+                        "Maximum dosage (ml per litre)",
+                        maxDose
+                    );
+
+                    const dosageCard = makeElement("article", "info-card wide");
+                    dosageCard.append(
+                        makeElement("h3", "info-heading", "⚖️ Dosage Information"),
+                        dosageGrid
+                    );
+
+                    grid.appendChild(dosageCard);
+
+                    handled.add("min_dosage_ml_per_l");
+                    handled.add("max_dosage_ml_per_l");
+                }
+
+                // Preserve any additional fields supplied by the backend.
+                Object.entries(treatment).forEach(([key, value]) => {
+                    if (handled.has(key) || value === null || value === "") return;
+
+                    addInfoCard(
+                        grid,
+                        titleCase(key),
+                        value,
+                        "📌",
+                        typeof value === "object" || String(value).length > 100
+                    );
+                });
+
+                if (!grid.children.length) {
+                    showError(
+                        "Treatment details unavailable",
+                        "No displayable treatment information was returned."
+                    );
+                    return;
+                }
+
+                const notice = makeElement("div", "notice");
+
+                notice.append(
+                    makeElement("strong", "", "⚠️ Important safety note"),
+                    makeElement(
+                        "p",
+                        "",
+                        "Dosage values are displayed as supplied by the application. " +
+                        "Verify the crop, product label, permitted use and application rate " +
+                        "with a qualified agricultural expert before using any chemical."
+                    )
+                );
+
+                container.appendChild(notice);
+            }
+
+            if (!saved) {
+                showError(
+                    "Analysis not found",
+                    "Please upload a leaf image and run the analysis first."
+                );
+                return;
+            }
+
+            try {
+                const data = JSON.parse(saved);
+
+                if (data.isValidationError || data.error) {
+                    showError(
+                        "Image validation failed ⚠️",
+                        data.message || data.error ||
+                        "Please upload a valid Tomato or Potato leaf image."
+                    );
+                    return;
+                }
+
+                renderTreatment(data);
+            } catch (error) {
+                console.error("Treatment page error:", error);
+
+                showError(
+                    "Unable to display treatment",
+                    "Please run the analysis again and reopen the treatment page."
+                );
+            }
+        })();
+    </script>
+</body>
+
+</html>

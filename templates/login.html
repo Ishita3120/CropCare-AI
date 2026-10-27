@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome | CropCare AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            background: linear-gradient(90deg,
+                rgba(8, 35, 20, 0.25),
+                rgba(8, 35, 20, 0.10)),
+            url("{{ url_for('static', filename='images/cropcare-collage.jpg') }}") center / cover no-repeat fixed;
+        }
+
+        .welcome-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+            box-sizing: border-box;
+        }
+
+        .welcome-card {
+            width: min(780px, 100%);
+            padding: clamp(28px, 6vw, 64px);
+            text-align: center;
+            color: #17352a;
+            background: rgba(255, 255, 255, 0.91);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 28px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+            backdrop-filter: blur(12px);
+            animation: welcomeIn 0.8s ease both;
+        }
+
+        .welcome-badge {
+            display: inline-block;
+            padding: 9px 16px;
+            border-radius: 30px;
+            background: #e5f6e9;
+            color: #17633c;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .welcome-card h1 {
+            margin: 24px 0 14px;
+            font-size: clamp(34px, 6vw, 56px);
+            line-height: 1.12;
+            color: #123b2a;
+        }
+
+        .welcome-card h1 span {
+            display: block;
+            color: #23834d;
+        }
+
+        .welcome-description {
+            max-width: 550px;
+            margin: 0 auto;
+            color: #52685a;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .welcome-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .welcome-feature {
+            padding: 17px 10px;
+            border: 1px solid #e0eee3;
+            border-radius: 16px;
+            background: rgba(247, 252, 248, 0.9);
+            font-size: 13px;
+            font-weight: 700;
+            transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .welcome-feature:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 22px rgba(25, 90, 48, 0.1);
+        }
+
+        .welcome-feature .feature-icon {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 27px;
+        }
+
+        .welcome-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 34px;
+            border-radius: 40px;
+            color: white;
+            background: linear-gradient(135deg, #269653, #105d35);
+            box-shadow: 0 10px 25px rgba(24, 112, 58, 0.25);
+            text-decoration: none;
+            font-weight: 800;
+            transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .welcome-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(24, 112, 58, 0.32);
+        }
+
+        .welcome-note {
+            margin-top: 22px;
+            color: #718277;
+            font-size: 12px;
+        }
+
+        @keyframes welcomeIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .welcome-shell {
+                padding: 16px;
+            }
+
+            .welcome-card {
+                padding: 28px 20px;
+            }
+
+            .welcome-features {
+                grid-template-columns: 1fr;
+                gap: 9px;
+            }
+
+            .welcome-feature {
+                padding: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .welcome-card {
+                animation: none;
+            }
+
+            .welcome-feature,
+            .welcome-button {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="welcome-shell">
+        <section class="welcome-card">
+
+            <div class="welcome-badge">
+                🌱 SMART CROP HEALTH MONITORING
+            </div>
+
+            <h1>
+                Healthy Crops,
+                <span>Brighter Tomorrow.</span>
+            </h1>
+
+            <p class="welcome-description">
+                Welcome to CropCare AI — detect tomato and potato
+                leaf diseases, understand crop health, and explore
+                helpful treatment guidance.
+            </p>
+
+            <div class="welcome-features">
+                <div class="welcome-feature">
+                    <span class="feature-icon">📸</span>
+                    Upload Leaf Image
+                </div>
+
+                <div class="welcome-feature">
+                    <span class="feature-icon">🔬</span>
+                    AI Disease Analysis
+                </div>
+
+                <div class="welcome-feature">
+                    <span class="feature-icon">🌿</span>
+                    Treatment Guidance
+                </div>
+            </div>
+
+            <a class="welcome-button" href="/upload">
+                Get Started <span aria-hidden="true">→</span>
+            </a>
+
+            <p class="welcome-note">
+                Supporting Tomato and Potato crops
+            </p>
+
+        </section>
+    </main>
+</body>
+
+</html>

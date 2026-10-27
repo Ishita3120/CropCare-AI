@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CropCare AI — Plant Health Assistant</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <style>
+    /* Default background: Tomato */
+    body {
+      background: linear-gradient(rgba(241, 250, 242, 0.30),
+        rgba(241, 250, 242, 0.30)),
+      url("{{ url_for('static', filename='images/tomato-collage.jpg') }}") center / cover fixed no-repeat;
+    }
+
+    /* Background when Potato is selected */
+    body.theme-potato {
+      background: linear-gradient(rgba(241, 250, 242, 0.30),
+        rgba(241, 250, 242, 0.30)),
+      url("{{ url_for('static', filename='images/potato-collage.jpg') }}") center / cover fixed no-repeat;
+    }
+
+    /* Crop selection cards */
+    .crop-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .crop-option {
+      position: relative;
+      cursor: pointer;
+      text-align: left;
+      overflow: hidden;
+      padding: 0;
+      border: 2px solid #dcece2;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #17352a;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .crop-option:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(24, 92, 59, 0.12);
+    }
+
+    .crop-option.selected {
+      border-color: #23945c;
+      box-shadow: 0 0 0 3px rgba(35, 148, 92, 0.13);
+    }
+
+    .crop-option:focus-visible {
+      outline: 3px solid #23945c;
+      outline-offset: 3px;
+    }
+
+    .crop-option img {
+      display: block;
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+    }
+
+    .crop-option .crop-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 14px;
+      font-weight: 800;
+    }
+
+    .crop-option .crop-check {
+      color: #21834d;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    @media (max-width: 480px) {
+      .crop-options {
+        gap: 10px;
+      }
+
+      .crop-option img {
+        height: 95px;
+      }
+
+      .crop-option .crop-label {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- HEADER -->
+    <header class="topbar">
+
+      <div class="brand">
+        <div class="brand-icon">🌿</div>
+
+        <div>
+          <div class="brand-name">CropCare AI</div>
+          <div class="brand-tagline">
+            Your plant's little health assistant
+          </div>
+        </div>
+      </div>
+
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        AI System Ready
+      </div>
+
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <div class="hero-text">
+
+        <div class="eyebrow">
+          🌱 SMART CROP HEALTH MONITORING
+        </div>
+
+        <h1>
+          Let's see how your
+          <span>plant is feeling.</span> 💚
+        </h1>
+
+        <p>
+          Upload a leaf photo and I'll check its health,
+          identify possible disease, estimate severity,
+          and suggest what to do next.
+        </p>
+
+      </div>
+
+      <div class="hero-plant">🌿</div>
+
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <form id="diagnosis-form">
+
+        <div class="main-column">
+
+          <!-- CROP SELECTION -->
+          <section class="card crop-card">
+
+            <div class="card-heading">
+
+              <div class="heading-icon">🌱</div>
+
+              <div>
+                <h2>What are we checking?</h2>
+                <p>Select the crop you want to examine.</p>
+              </div>
+
+            </div>
+
+            <!-- Dropdown: no crop selected initially -->
+            <select id="crop-select" name="crop" required>
+              <option value="" selected disabled>Choose your crop</option>
+              <option value="tomato">🍅 Tomato</option>
+              <option value="potato">🥔 Potato</option>
+              <option value="other">🌿 Other</option>
+            </select>
+            <!-- Image selection cards -->
+            <div class="crop-options">
+
+              <button type="button" class="crop-option" data-crop="tomato" aria-pressed="false">
+
+                <img src="{{ url_for('static', filename='images/tomato-collage.jpg') }}"
+                  alt="Tomato plant and tomatoes">
+
+                <span class="crop-label">
+                  <span>🍅 Tomato</span>
+                  <span class="crop-check" aria-hidden="true"></span>
+                </span>
+
+              </button>
+
+              <button type="button" class="crop-option" data-crop="potato" aria-pressed="false">
+
+                <img src="{{ url_for('static', filename='images/potato-collage.jpg') }}"
+                  alt="Potato plant and potatoes">
+
+                <span class="crop-label">
+                  <span>🥔 Potato</span>
+                  <span class="crop-check" aria-hidden="true"></span>
+                </span>
+
+              </button>
+
+            </div>
+
+          </section>
+
+          <!-- IMAGE UPLOAD -->
+          <section class="card upload-card">
+
+            <div class="card-heading">
+
+              <div class="heading-icon">📸</div>
+
+              <div>
+                <h2>Show me the leaf!</h2>
+                <p>One clear leaf photo works best.</p>
+              </div>
+
+            </div>
+
+            <div id="dropzone" class="dropzone">
+
+              <input type="file" id="file-input" name="image" accept="image/png, image/jpeg, image/webp" hidden>
+
+              <div id="dropzone-empty" class="dropzone-empty">
+
+                <div class="upload-icon">📷</div>
+
+                <h3>Drop your leaf photo here</h3>
+
+                <p>
+                  or <span class="choose-text">choose a photo</span>
+                </p>
+
+                <div class="file-hint">
+                  JPG · PNG · WEBP · up to 8 MB
+                </div>
+
+              </div>
+
+              <div id="dropzone-preview" class="dropzone-preview" hidden>
+
+                <div class="preview-wrapper">
+
+                  <img id="preview-img" alt="Selected leaf photo">
+
+                  <div class="preview-badge">
+                    ✓ Photo selected
+                  </div>
+
+                </div>
+
+                <button type="button" id="clear-image" class="clear-btn">
+
+                  ↻ Choose another photo
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- ENVIRONMENTAL CONDITIONS -->
+          <section class="card environment-card">
+
+            <div class="card-heading">
+
+              <div class="heading-icon">🌤️</div>
+
+              <div>
+                <h2>Field conditions</h2>
+                <p>Optional — add these if you know them.</p>
+              </div>
+
+            </div>
+
+            <div class="env-grid">
+
+              <div class="env-input">
+
+                <label for="temperature">
+                  🌡️ Temperature
+                </label>
+
+                <div class="input-with-unit">
+
+                  <input type="number" id="temperature" name="temperature_c" placeholder="28" step="any">
+
+                  <span>°C</span>
+
+                </div>
+
+              </div>
+
+              <div class="env-input">
+
+                <label for="humidity">
+                  💧 Humidity
+                </label>
+
+                <div class="input-with-unit">
+
+                  <input type="number" id="humidity" name="humidity_pct" placeholder="72" step="any" min="0" max="100">
+
+                  <span>%</span>
+
+                </div>
+
+              </div>
+
+              <div class="env-input">
+
+                <label for="soil-moisture">
+                  🌱 Soil moisture
+                </label>
+
+                <div class="input-with-unit">
+
+                  <input type="number" id="soil-moisture" name="soil_moisture_pct" placeholder="48" step="any" min="0"
+                    max="100">
+
+                  <span>%</span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- ANALYZE BUTTON -->
+          <button type="submit" id="analyze-btn" class="analyze-btn" disabled>
+
+            <span class="btn-icon">✨</span>
+
+            <span class="btn-text">
+              Analyze My Leaf
+            </span>
+
+          </button>
+
+          <p id="form-error" class="form-error" hidden>
+          </p>
+
+        </div>
+
+      </form>
+
+      <!-- RESULTS: POPULATED BY main.js -->
+      <section id="report" class="report" hidden>
+
+        <div id="report-inner" class="report-inner">
+          <!-- Results will appear here -->
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+      <span>🌿 CropCare AI</span>
+
+      <span>AI-powered crop disease screening</span>
+
+      <span>Prototype • For academic demonstration</span>
+
+    </footer>
+
+  </div>
+
+  <!-- Existing JavaScript -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  <!-- Crop selection synchronization -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const cropSelect = document.getElementById("crop-select");
+      const cropOptions = document.querySelectorAll(".crop-option");
+
+      if (!cropSelect || cropOptions.length === 0) {
+        console.error("Crop selection elements were not found.");
+        return;
+      }
+
+      function updateCropSelection(crop, notify = false) {
+
+        // Sync dropdown with selected crop
+        cropSelect.value = crop;
+
+        // Change background for Potato
+        document.body.classList.toggle(
+          "theme-potato",
+          crop === "potato"
+        );
+
+        // Update selected card and tick
+        cropOptions.forEach(function (button) {
+
+          const isSelected = button.dataset.crop === crop;
+
+          button.classList.toggle("selected", isSelected);
+          button.setAttribute("aria-pressed", String(isSelected));
+
+          const tick = button.querySelector(".crop-check");
+
+          if (tick) {
+            tick.textContent = isSelected ? "✓" : "";
+          }
+
+        });
+
+        // Notify other listeners, including main.js, when a card is clicked
+        if (notify) {
+          cropSelect.dispatchEvent(
+            new Event("change", { bubbles: true })
+          );
+        }
+      }
+
+      // Dropdown selection updates card, tick and background
+      cropSelect.addEventListener("change", function () {
+        updateCropSelection(cropSelect.value);
+      });
+
+      // Card click updates dropdown, tick and background
+      cropOptions.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+          updateCropSelection(button.dataset.crop, true);
+        });
+
+      });
+
+      // Initial state: no crop selected
+      updateCropSelection("");
+
+    });
+  </script>
+
+</body>
+
+</html>

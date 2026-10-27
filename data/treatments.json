@@ -1,0 +1,62 @@
+{
+  "tomato": {
+    "healthy": {
+      "name": "No treatment needed",
+      "active_ingredient": "-",
+      "min_dosage_ml_per_l": 0,
+      "max_dosage_ml_per_l": 0,
+      "recheck_days": 7,
+      "advice": "Leaf shows no significant disease signal. Keep monitoring weekly, especially after rain."
+    },
+    "early_blight": {
+      "name": "Chlorothalonil-based fungicide",
+      "active_ingredient": "Chlorothalonil",
+      "min_dosage_ml_per_l": 1.5,
+      "max_dosage_ml_per_l": 3.0,
+      "recheck_days": 2,
+      "advice": "Remove and destroy affected lower leaves. Improve airflow between plants and avoid overhead watering."
+    },
+    "bacterial_spot": {
+      "name": "Treatment guidance - expert validation required",
+      "active_ingredient": "To be selected from a locally registered product label",
+      "min_dosage_ml_per_l": 0,
+      "max_dosage_ml_per_l": 0,
+      "recheck_days": 3,
+      "advice": "Remove severely affected leaves, improve airflow, avoid overhead watering, and consult the applicable registered treatment label before any chemical application."
+    },
+    "late_blight": {
+      "name": "Copper-based fungicide",
+      "active_ingredient": "Copper hydroxide",
+      "min_dosage_ml_per_l": 2.0,
+      "max_dosage_ml_per_l": 4.0,
+      "recheck_days": 1,
+      "advice": "Late blight spreads fast in humid conditions. Isolate affected plants and treat within 24 hours."
+    }
+  },
+  "potato": {
+    "healthy": {
+      "name": "No treatment needed",
+      "active_ingredient": "-",
+      "min_dosage_ml_per_l": 0,
+      "max_dosage_ml_per_l": 0,
+      "recheck_days": 7,
+      "advice": "Leaf shows no significant disease signal. Keep monitoring weekly, especially after rain."
+    },
+    "early_blight": {
+      "name": "Chlorothalonil-based fungicide",
+      "active_ingredient": "Chlorothalonil",
+      "min_dosage_ml_per_l": 1.5,
+      "max_dosage_ml_per_l": 3.0,
+      "recheck_days": 2,
+      "advice": "Rotate crops next season if this recurs; early blight persists in soil debris."
+    },
+    "late_blight": {
+      "name": "Copper-based fungicide",
+      "active_ingredient": "Copper hydroxide",
+      "min_dosage_ml_per_l": 2.0,
+      "max_dosage_ml_per_l": 4.0,
+      "recheck_days": 1,
+      "advice": "Late blight spreads fast in humid conditions. Isolate affected plants and treat within 24 hours."
+    }
+  }
+}
